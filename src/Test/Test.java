@@ -144,6 +144,9 @@ public class Test {
                 case 11:
                     System.out.println(grafo.gradoEntradaSalida());
 
+                case 12:
+                    grafo.printMatrix();
+
                 default:
                     System.out.println("Ingrese una opción válida");
                     break;

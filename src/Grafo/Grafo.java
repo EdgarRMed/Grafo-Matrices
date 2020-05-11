@@ -20,7 +20,7 @@ public class Grafo implements Serializable {
         cola = new ColaDinamica();
         MTX = new MatrixIn[n][n];
         AV = new Vertice[n];
-        numVertices = 0;
+        numVertices =  0;
         for (int i = 0; i < n; i++){
             for (int j = 0; j < n; j++){
                 MTX[i][j] = new MatrixIn(0); // se llena la matriz de 0s por default
@@ -82,18 +82,36 @@ public class Grafo implements Serializable {
     }
 
     public void deleteConextions(int position) throws NoExisteElementoException {
-        for (int i = 0; i < numVertices; i++){
+        for (int i = 0; i < numVertices; i++){ // -1 indica que se ha eliminado el vértice
                 MTX[position][i].state = -1;
                 MTX[i][position].state = -1;
         }
+        // Una vez eliminado se procede a recorrer posiciones
+        for (int i = 0; i < numVertices; i++){
+            for (int j = 0; j < numVertices; j++) {
+                if (MTX[i][j].state == -1){
+                    for (int column = j; column < numVertices - 1; column ++){ // Aquí se recorren columnas
+                            MTX[i][column].state = MTX[i][column+1].state;
+                    }
+                }
+            }
+        }
+        for (int i = 0; i < numVertices; i++){
+            for (int j = 0; j < numVertices; j++) {
+                if (MTX[i][j].state == -1){
+                    for (int row = i; row < numVertices - 1; row++){ // Aquí se recorren filas
+                        MTX[row][j].state = MTX[row+1][j].state;
+                    }
+                }
+            }
+        }
     }
 
-    // Dado que la matriz de adycencnia no es dinamica solo se pueden eliminar vértices con conexiones ubicados al final
     public void deleteVertice(String name) throws NoExisteElementoException {
         int i = searchVertice(name);
         if (i != -1) {
             deleteConextions(i); // Se eliminan todas las conexiones con el vértice
-            for (int j = i; j < numVertices-1; j++)
+            for (int j = i; j < numVertices-1; j++) // Se elimina el vertice de la lista
                     AV[j] = AV[j+1];
             numVertices --;
         }
@@ -101,21 +119,21 @@ public class Grafo implements Serializable {
             throw new NoExisteElementoException();
     }
 
-    // Algoritmos implementados al grafo
+    // Algoritmos implementados al grafo................................................................................
 
     public void BreadthFirstSearch (){
         ColaDinamica cola = new ColaDinamica();
         Vertice aux = AV[0];
-        if (aux.wating){
+        if (aux.waiting){
             cola.encolar(aux);
-            aux.wating = false;
+            aux.waiting = false;
             while (!cola.isEmpty()){
                 aux = cola.desencolar();
                 stringBFS += aux;
                 for (int i = aux.pos; i < numVertices; i++){
-                    if (MTX[aux.pos][i].state == 1 && AV[i].wating){
+                    if (MTX[aux.pos][i].state == 1 && AV[i].waiting){
                         cola.encolar(AV[i]);
-                        AV[i].wating = false;
+                        AV[i].waiting = false;
                     }
                 }
 
@@ -160,8 +178,17 @@ public class Grafo implements Serializable {
 
     return null;
     }
+    // algoritmo de control que imprime la matriz de adyacencia
+    public void printMatrix() {
+        for (int i = 0; i < numVertices; i++) {
+            for (int j = 0; j < numVertices; j++) {
+                System.out.print(MTX[i][j].state + " ");
+            }
+            System.out.println();
+        }
+    }
 
-    // Fin algoritmos de implementación
+    // Fin algoritmos de implementación.................................................................................
     @Override
     public String toString() {
         String grafo = "";

@@ -8,7 +8,7 @@ public class MatrixIn implements Serializable {
     public int weight;
 
     MatrixIn(int state, int weight){
-        this.state = state;
+        this.state = state; // Indica si tiene conexiones o no
         this.weight = weight;
     }
     MatrixIn(int state){
