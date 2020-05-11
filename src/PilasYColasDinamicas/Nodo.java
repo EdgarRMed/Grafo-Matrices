@@ -4,18 +4,18 @@ import Grafo.Vertice;
 
 import java.io.Serializable;
 
-public class Nodo implements Serializable {
-    Vertice vertice;
+public class Nodo <T> implements Serializable { // Nodo genérico para objetos
+    T object;
     Nodo next;
-    public Nodo(Vertice vertice){
-        this.vertice = vertice;
+    public Nodo(T object){
+        this.object = object;
         next = null;
     }
 
     public String toString(){
         String cad = "";
         cad+=" ->";
-        cad+= vertice;
+        cad+= object;
         return cad;
     }
 }

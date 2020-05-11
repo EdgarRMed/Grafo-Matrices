@@ -4,7 +4,7 @@ import Grafo.Vertice;
 
 import java.io.Serializable;
 
-public class PilaDinamica implements Serializable {
+public class PilaDinamica <T> implements Serializable { // Pila genérica para objetos
     Nodo raiz;
     public PilaDinamica(){raiz = null;}
 
@@ -15,25 +15,25 @@ public class PilaDinamica implements Serializable {
             return false;
     }
 
-    public void push(Vertice vertice){
-        Nodo nuevo = new Nodo(vertice);
+    public void push(T object){
+        Nodo nuevo = new Nodo(object);
         if (raiz != null)
             nuevo.next = raiz;
         raiz = nuevo;
     }
 
-    public Vertice pop(){
+    public T pop(){
         Nodo aux;
-        Vertice vertice = null;
+        T object = null;
         if (raiz == null)
             System.out.println("La pila está vacía");
         else {
             aux = raiz;
-            vertice = aux.vertice;
+            object = (T) aux.object;
             raiz = raiz.next;
             aux.next = null;
         }
-        return vertice;
+        return object;
     }
 
     public String toString(){

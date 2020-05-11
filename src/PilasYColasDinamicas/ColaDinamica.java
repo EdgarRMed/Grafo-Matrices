@@ -1,10 +1,8 @@
 package PilasYColasDinamicas;
-
 import Grafo.Vertice;
-
 import java.io.Serializable;
 
-public class ColaDinamica implements Serializable { // Generic
+public class ColaDinamica <T> implements Serializable { // Cola genérica para objetos
     Nodo raiz;
     public  ColaDinamica(){
         raiz = null;
@@ -17,29 +15,29 @@ public class ColaDinamica implements Serializable { // Generic
             return false;
     }
 
-    public void encolar(Vertice vertice){
-        Nodo nuevo = new Nodo(vertice);
+    public void encolar(T object){
+        Nodo nuevo = new Nodo(object);
         if(raiz != null)
             nuevo.next = raiz;
         raiz = nuevo;
     }
 
-    public Vertice desencolar() {
-        Vertice vertice = null;
+    public T desencolar() {
+        T object = null;
         Nodo aux = raiz;
             while (aux != null) {
                 if (aux.next == null) {
-                    vertice = aux.vertice;
+                    object = (T) aux.object;
                     raiz = null;
                 } else {
                     if (aux.next.next == null) {
-                        vertice = aux.next.vertice;
+                        object = (T) aux.next.object;
                         aux.next = null;
                     }
                 }
                 aux = aux.next;
             }
-        return vertice;
+        return object;
     }
 
     public String toString(){

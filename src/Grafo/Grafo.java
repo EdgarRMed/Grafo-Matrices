@@ -2,6 +2,7 @@ package Grafo;
 
 import Exceptions.NoExisteElementoException;
 import PilasYColasDinamicas.ColaDinamica;
+import PilasYColasDinamicas.ColaPriorizada;
 import PilasYColasDinamicas.PilaDinamica;
 
 import java.io.Serializable;
@@ -134,7 +135,7 @@ public class Grafo implements Serializable {
     // Algoritmos implementados al grafo................................................................................
 
     public void BreadthFirstSearch (){
-        ColaDinamica cola = new ColaDinamica();
+        ColaDinamica <Vertice> cola = new ColaDinamica();
         Vertice aux = AV[0];
         if (aux.waiting){
             cola.encolar(aux);
@@ -187,6 +188,9 @@ public class Grafo implements Serializable {
     }
 
     public String dijksta(){
+        Grafo acmc = new Grafo(20); // Mismo valor que el del grafo original
+        ColaPriorizada cp = new ColaPriorizada();
+
 
     return null;
     }
