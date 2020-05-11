@@ -9,7 +9,7 @@ import java.io.Serializable;
 public class Grafo implements Serializable {
     PilaDinamica pila;
     ColaDinamica cola;
-    MatrixIn MTX[][]; // Matriz de adyacencia
+    int MTX[][]; // Matriz de adyacencia
     Vertice AV []; // Lista que guarda los vértices
     int numVertices;
     public String stringDFS = "";
@@ -18,12 +18,12 @@ public class Grafo implements Serializable {
     public Grafo (int n){
         pila = new PilaDinamica();
         cola = new ColaDinamica();
-        MTX = new MatrixIn[n][n];
+        MTX = new int[n][n];
         AV = new Vertice[n];
         numVertices = 0;
         for (int i = 0; i < n; i++){
             for (int j = 0; j < n; j++){
-                MTX[i][j] = new MatrixIn(0); // se llena la matriz de 0s por default
+                MTX[i][j] = 0;// se llena la matriz de 0s por default
             }
         }
     }
@@ -54,11 +54,11 @@ public class Grafo implements Serializable {
         int i = searchVertice(name1);
         int j = searchVertice(name2);
         if (i != -1 && j != -1){
-            if (MTX [i][j].state == 1 && MTX [j][i].state == 1)
+            if (MTX [i][j] == 1 && MTX [j][i] == 1)
                 throw new  NoExisteElementoException("Ya existe una conexion entre estos nodos");
             else {
-                MTX[i][j].state = 1;
-                MTX[j][i].state = 1;
+                MTX[i][j] = 1;
+                MTX[j][i] = 1;
             }
         }
         else
@@ -70,11 +70,11 @@ public class Grafo implements Serializable {
         int i = searchVertice(name1);
         int j = searchVertice(name2);
         if (i != -1 && j != -1){
-            if (MTX [i][j].state == 0 && MTX[j][i].state == 0)
+            if (MTX [i][j] == 0 && MTX[j][i] == 0)
                 throw new NoExisteElementoException("No hay conexion entre estos nodos");
             else {
-                MTX[i][j].state = 0;
-                MTX[j][i].state = 0;
+                MTX[i][j] = 0;
+                MTX[j][i] = 0;
             }
         }
         else
@@ -83,8 +83,8 @@ public class Grafo implements Serializable {
 
     public void deleteConextions(int position) throws NoExisteElementoException {
         for (int i = 0; i < numVertices; i++){
-                MTX[position][i].state = -1;
-                MTX[i][position].state = -1;
+                MTX[position][i] = -1;
+                MTX[i][position] = -1;
         }
     }
 
@@ -113,7 +113,7 @@ public class Grafo implements Serializable {
                 aux = cola.desencolar();
                 stringBFS += aux;
                 for (int i = aux.pos; i < numVertices; i++){
-                    if (MTX[aux.pos][i].state == 1 && AV[i].wating){
+                    if (MTX[aux.pos][i] == 1 && AV[i].wating){
                         cola.encolar(AV[i]);
                         AV[i].wating = false;
                     }
@@ -129,7 +129,7 @@ public class Grafo implements Serializable {
         AV[position].processed = true;
         stringDFS += AV[position];
         for (int i = 0;i < numVertices; i++){
-            if (MTX[position][i].state == 1 && !AV[i].processed){
+            if (MTX[position][i] == 1 && !AV[i].processed){
                 depthFirstSearch(i);
             }
         }
@@ -142,9 +142,9 @@ public class Grafo implements Serializable {
         int contadorSalidas = 0;
         for (int i = 0; i < numVertices; i++ ) {
             for (int j = 0; j < numVertices; j++ ) {
-                if (MTX[i][j].state == 1)
+                if (MTX[i][j] == 1)
                     contadorSalidas ++;
-                if (MTX[j][i].state == 1)
+                if (MTX[j][i] == 1)
                    contadorEntradas ++;
             }
             cad += ("Entrada "+AV[i]+contadorEntradas);
@@ -169,7 +169,7 @@ public class Grafo implements Serializable {
         for (int i = 0; i < numVertices; i++){
             grafo += AV [i];
             for (int j = 0; j < numVertices; j++){
-                if (MTX[i][j].state == 1){
+                if (MTX[i][j] == 1){
                     grafo += AV[j].name + ",";
                 }
             }
