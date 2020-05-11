@@ -90,19 +90,23 @@ public class Grafo implements Serializable {
         for (int i = 0; i < numVertices; i++){
             for (int j = 0; j < numVertices; j++) {
                 if (MTX[i][j].state == -1){
-                    for (int column = j; column < numVertices - 1; column ++){ // Aquí se recorren columnas
+                    for (int column = j; column < numVertices -1; column ++){ // Aquí se recorren columnas
                             MTX[i][column].state = MTX[i][column+1].state;
                     }
                 }
+                if (j == numVertices-1)
+                    MTX[i][j].state = 0;
             }
         }
         for (int i = 0; i < numVertices; i++){
             for (int j = 0; j < numVertices; j++) {
                 if (MTX[i][j].state == -1){
-                    for (int row = i; row < numVertices - 1; row++){ // Aquí se recorren filas
+                    for (int row = i; row < numVertices -1; row++){ // Aquí se recorren filas
                         MTX[row][j].state = MTX[row+1][j].state;
                     }
                 }
+                if (i == numVertices-1)
+                    MTX[i][j].state = 0;
             }
         }
     }
