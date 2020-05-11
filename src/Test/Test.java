@@ -12,6 +12,7 @@ public class Test {
         Scanner in = new Scanner(System.in);
         boolean showMenu = true;
         int option = 0;
+        int weight;
         String nombre, origen, destino;
         while (option != 7) {
             System.out.println("Ingrese una opción");
@@ -86,8 +87,11 @@ public class Test {
                     System.out.println("Vertice destino (Insertar)");
                     System.out.println("Nombre: ");
                     destino = in.nextLine();
+                    System.out.println("Ingrese el peso:");
+                    weight = in.nextInt();
+                    in.nextLine();
                     try {
-                        grafo.insertArco(origen, destino);
+                        grafo.insertArco(origen, destino, weight);
                         System.out.println(grafo);
                     }
                     catch (NoExisteElementoException e) {
@@ -144,8 +148,10 @@ public class Test {
                 case 11:
                     System.out.println(grafo.gradoEntradaSalida());
 
+                //Punto de control para visualizar la matriz si así se requiere
                 case 12:
                     grafo.printMatrix();
+                    break;
 
                 default:
                     System.out.println("Ingrese una opción válida");

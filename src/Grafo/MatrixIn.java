@@ -13,6 +13,6 @@ public class MatrixIn implements Serializable {
     }
     MatrixIn(int state){
         this.state = state;
-        this.weight = 1;
+        this.weight = 0;
     }
 }

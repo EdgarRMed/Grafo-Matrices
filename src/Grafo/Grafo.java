@@ -9,7 +9,7 @@ import java.io.Serializable;
 public class Grafo implements Serializable {
     PilaDinamica pila;
     ColaDinamica cola;
-    MatrixIn MTX[][]; // Matriz de adyacencia
+    MatrixIn mtx[][]; // Matriz de adyacencia
     Vertice AV []; // Lista que guarda los vértices
     int numVertices;
     public String stringDFS = "";
@@ -18,12 +18,13 @@ public class Grafo implements Serializable {
     public Grafo (int n){
         pila = new PilaDinamica();
         cola = new ColaDinamica();
-        MTX = new MatrixIn[n][n];
+        mtx = new MatrixIn[n][n];
         AV = new Vertice[n];
         numVertices =  0;
         for (int i = 0; i < n; i++){
             for (int j = 0; j < n; j++){
-                MTX[i][j] = new MatrixIn(0); // se llena la matriz de 0s por default
+                // se llena la matriz de 0s y un peso de 0 por default
+                mtx[i][j] = new MatrixIn(0);
             }
         }
     }
@@ -50,15 +51,21 @@ public class Grafo implements Serializable {
         return -1;
     }
 
-    public void insertArco (String name1, String name2) throws NoExisteElementoException{
+    public void setWeight(int row, int col, int weight){
+        mtx[row][col].weight = weight;
+        mtx[col][row].weight = weight;
+    }
+
+    public void insertArco (String name1, String name2, int weight) throws NoExisteElementoException{
         int i = searchVertice(name1);
         int j = searchVertice(name2);
         if (i != -1 && j != -1){
-            if (MTX [i][j].state == 1 && MTX [j][i].state == 1)
+            if (mtx[i][j].state == 1 && mtx[j][i].state == 1)
                 throw new  NoExisteElementoException("Ya existe una conexion entre estos nodos");
             else {
-                MTX[i][j].state = 1;
-                MTX[j][i].state = 1;
+                mtx[i][j].state = 1;
+                mtx[j][i].state = 1;
+                setWeight(i,j,weight);
             }
         }
         else
@@ -70,11 +77,12 @@ public class Grafo implements Serializable {
         int i = searchVertice(name1);
         int j = searchVertice(name2);
         if (i != -1 && j != -1){
-            if (MTX [i][j].state == 0 && MTX[j][i].state == 0)
+            if (mtx[i][j].state == 0 && mtx[j][i].state == 0)
                 throw new NoExisteElementoException("No hay conexion entre estos nodos");
             else {
-                MTX[i][j].state = 0;
-                MTX[j][i].state = 0;
+                mtx[i][j].state = 0;
+                mtx[j][i].state = 0;
+                setWeight(i,j,0);
             }
         }
         else
@@ -83,30 +91,30 @@ public class Grafo implements Serializable {
 
     public void deleteConextions(int position) throws NoExisteElementoException {
         for (int i = 0; i < numVertices; i++){ // -1 indica que se ha eliminado el vértice
-                MTX[position][i].state = -1;
-                MTX[i][position].state = -1;
+                mtx[position][i].state = -1;
+                mtx[i][position].state = -1;
         }
         // Una vez eliminado se procede a recorrer posiciones
         for (int i = 0; i < numVertices; i++){
             for (int j = 0; j < numVertices; j++) {
-                if (MTX[i][j].state == -1){
+                if (mtx[i][j].state == -1){
                     for (int column = j; column < numVertices -1; column ++){ // Aquí se recorren columnas
-                            MTX[i][column].state = MTX[i][column+1].state;
+                            mtx[i][column].state = mtx[i][column+1].state;
                     }
                 }
                 if (j == numVertices-1)
-                    MTX[i][j].state = 0;
+                    mtx[i][j].state = 0;
             }
         }
         for (int i = 0; i < numVertices; i++){
             for (int j = 0; j < numVertices; j++) {
-                if (MTX[i][j].state == -1){
+                if (mtx[i][j].state == -1){
                     for (int row = i; row < numVertices -1; row++){ // Aquí se recorren filas
-                        MTX[row][j].state = MTX[row+1][j].state;
+                        mtx[row][j].state = mtx[row+1][j].state;
                     }
                 }
                 if (i == numVertices-1)
-                    MTX[i][j].state = 0;
+                    mtx[i][j].state = 0;
             }
         }
     }
@@ -135,7 +143,7 @@ public class Grafo implements Serializable {
                 aux = cola.desencolar();
                 stringBFS += aux;
                 for (int i = aux.pos; i < numVertices; i++){
-                    if (MTX[aux.pos][i].state == 1 && AV[i].waiting){
+                    if (mtx[aux.pos][i].state == 1 && AV[i].waiting){
                         cola.encolar(AV[i]);
                         AV[i].waiting = false;
                     }
@@ -151,7 +159,7 @@ public class Grafo implements Serializable {
         AV[position].processed = true;
         stringDFS += AV[position];
         for (int i = 0;i < numVertices; i++){
-            if (MTX[position][i].state == 1 && !AV[i].processed){
+            if (mtx[position][i].state == 1 && !AV[i].processed){
                 depthFirstSearch(i);
             }
         }
@@ -164,9 +172,9 @@ public class Grafo implements Serializable {
         int contadorSalidas = 0;
         for (int i = 0; i < numVertices; i++ ) {
             for (int j = 0; j < numVertices; j++ ) {
-                if (MTX[i][j].state == 1)
+                if (mtx[i][j].state == 1)
                     contadorSalidas ++;
-                if (MTX[j][i].state == 1)
+                if (mtx[j][i].state == 1)
                    contadorEntradas ++;
             }
             cad += ("Entrada "+AV[i]+contadorEntradas);
@@ -186,7 +194,7 @@ public class Grafo implements Serializable {
     public void printMatrix() {
         for (int i = 0; i < numVertices; i++) {
             for (int j = 0; j < numVertices; j++) {
-                System.out.print(MTX[i][j].state + " ");
+                System.out.print(mtx[i][j].state + ","+mtx[i][j].weight+"   ");
             }
             System.out.println();
         }
@@ -200,7 +208,7 @@ public class Grafo implements Serializable {
         for (int i = 0; i < numVertices; i++){
             grafo += AV [i];
             for (int j = 0; j < numVertices; j++){
-                if (MTX[i][j].state == 1){
+                if (mtx[i][j].state == 1){
                     grafo += AV[j].name + ",";
                 }
             }
