@@ -193,6 +193,7 @@ public class Grafo implements Serializable {
         Grafo arbolDelCaminoMasCorto = new Grafo(20);
         ColaPriorizada <ElementoColaPriorizada> colaPriorizada = new ColaPriorizada<>();
         int posicionVertice = searchVertice(vertice);
+        int pesoAcumulado;
         ElementoColaPriorizada elementoColaPriorizada;
 
         // Comienza el algoritmo
@@ -217,12 +218,14 @@ public class Grafo implements Serializable {
                 // Se inseta en el arbol y se crea la conexion
                 arbolDelCaminoMasCorto.insertVertice(AV[elementoColaPriorizada.actual].name);
                 arbolDelCaminoMasCorto.insertArco(AV[elementoColaPriorizada.predecesor].name, AV[elementoColaPriorizada.actual].name, elementoColaPriorizada.peso);
+                // Se guarda el peso de su antecesor para ir acumulando
+                pesoAcumulado = elementoColaPriorizada.pesoAcumulado;
                 // Se busca sus caminos y se insertan en la cola
                 int fila = elementoColaPriorizada.actual;
                 for (int columna = 0; columna < numVertices; columna++) {
                     // Si existe conexion entonces se agregan a la cola priorizada
                     if (mtx[fila][columna].state == 1 && !AV[columna].processed) {
-                        elementoColaPriorizada = new ElementoColaPriorizada(fila, columna, mtx[fila][columna].weight, mtx[fila][columna].weight, 0);
+                        elementoColaPriorizada = new ElementoColaPriorizada(fila, columna, mtx[fila][columna].weight, mtx[fila][columna].weight + pesoAcumulado, 0);
                         colaPriorizada.encolar(elementoColaPriorizada);
                     }
                 }

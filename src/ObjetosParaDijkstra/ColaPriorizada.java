@@ -15,27 +15,23 @@ public class ColaPriorizada <T> extends ColaDinamica {
         // Se encuentra el menor de los elementos
         while (auxParaRecorrerCola != null) {
             auxParaGuardarDatos = (ElementoColaPriorizada) auxParaRecorrerCola.object;
-            if (auxParaGuardarDatos.peso < menor.peso)
+            if (auxParaGuardarDatos.pesoAcumulado < menor.pesoAcumulado)
                 menor = auxParaGuardarDatos;
             auxParaRecorrerCola = auxParaRecorrerCola.next;
         }
         // si el menor es la raiz se elimina
         auxParaRecorrerCola = raiz;
         auxParaGuardarDatos = (ElementoColaPriorizada) auxParaRecorrerCola.object;
-        if (auxParaGuardarDatos.peso == menor.peso)
+        if (auxParaGuardarDatos.pesoAcumulado == menor.pesoAcumulado)
             raiz = auxParaRecorrerCola.next;
         else { // Si no, se busca y se elimina
             while (auxParaRecorrerCola != null) {
                 // Se gurdan los datos del siguiente nodo
-                // Si es el último
-                if (auxParaRecorrerCola.next.next == null) {
-                    auxParaRecorrerCola.next = null;
-                } else {
                     auxParaGuardarDatos = (ElementoColaPriorizada) auxParaRecorrerCola.next.object;
-                if (auxParaGuardarDatos.peso == menor.peso) { // Se encontró el menor
+                if (auxParaGuardarDatos.pesoAcumulado == menor.pesoAcumulado) { // Se encontró el menor
                     auxParaRecorrerCola.next = auxParaRecorrerCola.next.next; // Se reconectan
+                    break;
                 }
-            }
                 auxParaRecorrerCola = auxParaRecorrerCola.next;
             }
         }

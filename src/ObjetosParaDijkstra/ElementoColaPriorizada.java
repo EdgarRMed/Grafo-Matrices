@@ -6,7 +6,7 @@ public class ElementoColaPriorizada implements Serializable {
     public int predecesor;
     public int actual;
     public int peso;
-    int pesoAcumulado;
+    public int pesoAcumulado;
     public int numIteraciones;
 
     public ElementoColaPriorizada(){}
@@ -20,7 +20,7 @@ public class ElementoColaPriorizada implements Serializable {
     }
 
     public String toString(){
-        return "[" + Integer.toString(peso) + ","+ "(" + Integer.toString(predecesor)+ "," + Integer.toString(actual) + ")" + "]" + Integer.toString(numIteraciones);
+        return "[" + Integer.toString(pesoAcumulado) + ","+ "(" + Integer.toString(predecesor)+ "," + Integer.toString(actual) + ")" + "]" + Integer.toString(numIteraciones);
     }
 
 }
