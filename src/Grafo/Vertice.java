@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class Vertice implements Serializable {
     String name;
     int pos;
+
     boolean waiting;
     boolean processed;
     public Vertice(String name){
@@ -12,6 +13,10 @@ public class Vertice implements Serializable {
         pos = -1;
         waiting = true;
         processed = false;
+    }
+
+    public String getName() {
+        return name;
     }
 
     @Override

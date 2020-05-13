@@ -6,13 +6,21 @@ import java.io.Serializable;
 public class MatrixIn implements Serializable {
     public int state;
     public int weight;
+    public boolean processed;
+    public int row,col;
 
     MatrixIn(int state, int weight){
         this.state = state; // Indica si tiene conexiones o no
         this.weight = weight;
+        this.processed = false;
     }
-    MatrixIn(int state){
+    public MatrixIn(int state){
         this.state = state;
         this.weight = 0;
+        this.processed = false;
+    }
+
+    public String toString (){
+        return Integer.toString(row) + "," + Integer.toString(col);
     }
 }

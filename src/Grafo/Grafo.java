@@ -1,8 +1,9 @@
 package Grafo;
 
 import Exceptions.NoExisteElementoException;
+import ObjetosParaDijkstra.ElementoColaPriorizada;
 import PilasYColasDinamicas.ColaDinamica;
-import PilasYColasDinamicas.ColaPriorizada;
+import ObjetosParaDijkstra.ColaPriorizada;
 import PilasYColasDinamicas.PilaDinamica;
 
 import java.io.Serializable;
@@ -187,13 +188,51 @@ public class Grafo implements Serializable {
         return cad;
     }
 
-    public String dijksta(){
-        Grafo acmc = new Grafo(20); // Mismo valor que el del grafo original
-        ColaPriorizada cp = new ColaPriorizada();
+    public void dijksta(String vertice) throws NoExisteElementoException {
+        // Elementos a usar en el algoritmo
+        Grafo arbolDelCaminoMasCorto = new Grafo(20);
+        ColaPriorizada <ElementoColaPriorizada> colaPriorizada = new ColaPriorizada<>();
+        int posicionVertice = searchVertice(vertice);
+        ElementoColaPriorizada elementoColaPriorizada;
 
-
-    return null;
+        // Comienza el algoritmo
+        // Se inserta el vértice de inicio en el arbol y sus caminos en la cola
+        arbolDelCaminoMasCorto.insertVertice(vertice);
+        AV[posicionVertice].processed = true; // Se marca como procesado
+        for (int columna = 0; columna < numVertices; columna++){
+            // Si existe conexion entonces se agregan a la cola priorizada
+            if (mtx[posicionVertice][columna].state == 1){
+                elementoColaPriorizada = new ElementoColaPriorizada(posicionVertice,columna, mtx[posicionVertice][columna].weight, mtx[posicionVertice][columna].weight,0);
+                colaPriorizada.encolar(elementoColaPriorizada);
+            }
+        }
+        System.out.println(colaPriorizada);
+        while (!colaPriorizada.isEmpty()){
+            // Mientras la cola no esté vacía se busca al elemento con el menor peso y se elimina
+            elementoColaPriorizada = colaPriorizada.buscarYEliminarElMenor();
+            System.out.println(elementoColaPriorizada);
+            // Se marca como ya recorrido
+            if (!AV[elementoColaPriorizada.actual].processed) {
+                AV[elementoColaPriorizada.actual].processed = true;
+                // Se inseta en el arbol y se crea la conexion
+                arbolDelCaminoMasCorto.insertVertice(AV[elementoColaPriorizada.actual].name);
+                arbolDelCaminoMasCorto.insertArco(AV[elementoColaPriorizada.predecesor].name, AV[elementoColaPriorizada.actual].name, elementoColaPriorizada.peso);
+                // Se busca sus caminos y se insertan en la cola
+                int fila = elementoColaPriorizada.actual;
+                for (int columna = 0; columna < numVertices; columna++) {
+                    // Si existe conexion entonces se agregan a la cola priorizada
+                    if (mtx[fila][columna].state == 1 && !AV[columna].processed) {
+                        elementoColaPriorizada = new ElementoColaPriorizada(fila, columna, mtx[fila][columna].weight, mtx[fila][columna].weight, 0);
+                        colaPriorizada.encolar(elementoColaPriorizada);
+                    }
+                }
+            }
+            System.out.println("\n"+arbolDelCaminoMasCorto);
+        }
     }
+
+
+
     // algoritmo de control que imprime la matriz de adyacencia
     public void printMatrix() {
         for (int i = 0; i < numVertices; i++) {

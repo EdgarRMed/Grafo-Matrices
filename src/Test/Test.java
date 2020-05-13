@@ -7,7 +7,7 @@ import java.io.*;
 import java.util.Scanner;
 
 public class Test {
-    public static void main (String [] args) throws IOException, ClassNotFoundException {
+    public static void main (String [] args) throws IOException, ClassNotFoundException, NoExisteElementoException {
         Grafo grafo = new Grafo(20);
         Scanner in = new Scanner(System.in);
         boolean showMenu = true;
@@ -28,6 +28,7 @@ public class Test {
                 System.out.println("9.Recorrido primero en anchura");
                 System.out.println("10.Recorrido primero en profundidad");
                 System.out.println("11. Imprimir el grado de entrada y salida de cada nodo");
+                System.out.println("12.Agoritmo de Dijksta");
                 showMenu = false;
             }
             System.out.print("> ");
@@ -148,8 +149,13 @@ public class Test {
                 case 11:
                     System.out.println(grafo.gradoEntradaSalida());
 
-                //Punto de control para visualizar la matriz si así se requiere
                 case 12:
+                    System.out.println("Ingrese el vértice de inicio:");
+                    origen = in.nextLine();
+                    grafo.dijksta(origen);
+                    break;
+                //Punto de control para visualizar la matriz si así se requiere
+                case 13:
                     grafo.printMatrix();
                     break;
 

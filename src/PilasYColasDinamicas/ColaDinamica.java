@@ -3,7 +3,7 @@ import Grafo.Vertice;
 import java.io.Serializable;
 
 public class ColaDinamica <T> implements Serializable { // Cola genérica para objetos
-    Nodo raiz;
+    public Nodo raiz;
     public  ColaDinamica(){
         raiz = null;
     }
