@@ -190,6 +190,7 @@ public class Grafo implements Serializable {
 
     public void dijksta(String vertice) throws NoExisteElementoException {
         // Elementos a usar en el algoritmo
+        String caminos = "";
         Grafo arbolDelCaminoMasCorto = new Grafo(20);
         ColaPriorizada <ElementoColaPriorizada> colaPriorizada = new ColaPriorizada<>();
         int posicionVertice = searchVertice(vertice);
@@ -207,15 +208,17 @@ public class Grafo implements Serializable {
                 colaPriorizada.encolar(elementoColaPriorizada);
             }
         }
-        System.out.println(colaPriorizada);
+        //System.out.println(colaPriorizada);
         while (!colaPriorizada.isEmpty()){
             // Mientras la cola no esté vacía se busca al elemento con el menor peso y se elimina
             elementoColaPriorizada = colaPriorizada.buscarYEliminarElMenor();
-            System.out.println(elementoColaPriorizada);
-            // Se marca como ya recorrido
+            //System.out.println(elementoColaPriorizada);
             if (!AV[elementoColaPriorizada.actual].processed) {
+                //Se inserta el recorrido en la cadena
+                caminos += vertice + "->" + AV[elementoColaPriorizada.actual].name + ": " + elementoColaPriorizada.pesoAcumulado + "\n";
+                // Se marca como ya recorrido
                 AV[elementoColaPriorizada.actual].processed = true;
-                // Se inseta en el arbol y se crea la conexion
+                // Se inserta en el arbol y se crea la conexion
                 arbolDelCaminoMasCorto.insertVertice(AV[elementoColaPriorizada.actual].name);
                 arbolDelCaminoMasCorto.insertArco(AV[elementoColaPriorizada.predecesor].name, AV[elementoColaPriorizada.actual].name, elementoColaPriorizada.peso);
                 // Se guarda el peso de su antecesor para ir acumulando
@@ -230,8 +233,10 @@ public class Grafo implements Serializable {
                     }
                 }
             }
-            System.out.println("\n"+arbolDelCaminoMasCorto);
+            //System.out.println("\n"+arbolDelCaminoMasCorto);
         }
+        System.out.println("\n"+arbolDelCaminoMasCorto);
+        System.out.println(caminos);
     }
 
 
